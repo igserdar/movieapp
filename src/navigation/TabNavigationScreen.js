@@ -14,6 +14,7 @@ import {
   Ionicons,
 } from '@exponent/vector-icons';
 import Colors from '../constants/Colors';
+import defaultRouteConfig from './defaultRouteConfig';
 
 export default class TabNavigationScreen extends React.Component {
   render() {
@@ -27,13 +28,13 @@ export default class TabNavigationScreen extends React.Component {
           <TabNavigationItem
             id="movies"
             renderIcon={isSelected => this._renderIcon('Movies', 'ios-film-outline', 'ios-film', isSelected)}>
-            <StackNavigation initialRoute="movies" />
+            <StackNavigation defaultRouteConfig={defaultRouteConfig} initialRoute="movies" />
           </TabNavigationItem>
 
           <TabNavigationItem
             id="tv-shows"
             renderIcon={isSelected => this._renderIcon('TV Shows', 'ios-desktop-outline', 'ios-desktop', isSelected)}>
-            <StackNavigation initialRoute="blank" />
+            <StackNavigation defaultRouteConfig={defaultRouteConfig}  initialRoute="blank" />
           </TabNavigationItem>
         </TabNavigation>
 

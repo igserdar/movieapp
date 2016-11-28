@@ -6,13 +6,14 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Platform
+  Platform,
 } from 'react-native';
 import Exponent from 'exponent';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Swiper from 'react-native-swiper';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { withNavigation } from '@exponent/ex-navigation';
 
 import * as moviesActions from './movies.actions';
 import CardOne from './components/CardOne';
@@ -20,13 +21,31 @@ import CardTwo from './components/CardTwo';
 import ProgressBar from '../_global/ProgressBar';
 import styles from './styles/Movies';
 
+@withNavigation
+class SearchButton extends Component {
+  render() {
+    return (
+      <TouchableOpacity onPress={this._openSearch} style={{
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingRight: 15,
+      }}>
+        <Icon name="ios-search" color="#fff" size={28} />
+      </TouchableOpacity>
+    );
+  }
+
+  _openSearch = () => {
+    this.props.navigation.showModal('search', { title: 'Search' });
+  }
+}
+
 class Movies extends Component {
   static route = {
     navigationBar: {
       title: 'Movies',
-      translucent: true,
-      backgroundColor: 'rgba(0,0,0,0.01)',
-      titleStyle: {color: '#fff'},
+      renderRight: () => Platform.OS === 'ios' && <SearchButton />,
     },
   }
 
@@ -60,35 +79,16 @@ class Movies extends Component {
   }
 
   _viewMoviesList(type, title) {
-    // this.props.navigation.showModal({
-    //   title,
-    //   screen: 'moviesList',
-    //   passProps: {
-    //     type
-    //   }
-    // });
+    this.props.navigation.showModal('moviesList', { type, title });
   }
 
   _viewMovie(movieId) {
-    this.props.navigation.showModal('movie', {
-      movieId
-    });
+    this.props.navigation.showModal('movie', { movieId });
   }
 
   _onRefresh() {
     this.setState({ isRefreshing: true });
     this._retrieveMovies('isRefreshed');
-  }
-
-  _onNavigatorEvent(event) {
-    // if (event.type === 'NavBarButtonPress') {
-    //   if (event.id === 'search') {
-    //     this.props.navigator.showModal({
-    //       screen: 'movieapp.Search',
-    //       title: 'Search'
-    //     });
-    //   }
-    // }
   }
 
   render() {
@@ -140,31 +140,28 @@ class Movies extends Component {
               <CardTwo key={info.id} info={info} viewMovie={this._viewMovie} />
             ))}
           </ScrollView>
+
           <View style={styles.browseList}>
-            <TouchableOpacity activeOpacity={0.7}>
+            <TouchableOpacity activeOpacity={0.7} onPress={this._viewMoviesList.bind(this, 'now_playing', 'Now Playing')}>
               <View style={styles.browseListItem}>
                 {iconPlay}
-                <Text
-                  style={styles.browseListItemText}
-                  onPress={this._viewMoviesList.bind(this, 'now_playing', 'Now Playing')}>
+                <Text style={styles.browseListItemText}>
                   Now Playing
                 </Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.7}>
+            <TouchableOpacity activeOpacity={0.7} onPress={this._viewMoviesList.bind(this, 'top_rated', 'Top Rated')}>
               <View style={styles.browseListItem}>
                 {iconTop}
-                <Text style={styles.browseListItemText} onPress={this._viewMoviesList.bind(this, 'top_rated', 'Top Rated')}>
+                <Text style={styles.browseListItemText}>
                   Top Rated
                 </Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity activeOpacity={0.7}>
-              <View style={styles.browseListItem}>
+              <View style={styles.browseListItem} onPress={this._viewMoviesList.bind(this, 'upcoming', 'Upcoming')}>
                 {iconUp}
-                <Text
-                  style={styles.browseListItemText}
-                  onPress={this._viewMoviesList.bind(this, 'upcoming', 'Upcoming')}>
+                <Text style={styles.browseListItemText}>
                   Upcoming
                 </Text>
               </View>
@@ -180,23 +177,9 @@ Movies.propTypes = {
   actions: PropTypes.object.isRequired,
   nowPlayingMovies: PropTypes.object.isRequired,
   popularMovies: PropTypes.object.isRequired,
-  // navigator: PropTypes.object
-};
-
-
-let rightButtons = [];
-
-if (Platform.OS === 'ios') {
-  rightButtons = [
-    {
-      id: 'search',
-      icon: require('../../img/ios-search.png') // eslint-disable-line
-    }
-  ];
-}
-
-Movies.navigatorButtons = {
-  rightButtons
+  navigator: PropTypes.object,
+  navigation: PropTypes.object,
+  route: PropTypes.object,
 };
 
 function mapStateToProps(state, ownProps) {

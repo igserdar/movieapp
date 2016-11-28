@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import FadeIn from '@exponent/react-native-fade-in-image';
 import Icon from 'react-native-vector-icons/Ionicons';
-import Exponent from 'exponent';
+import Exponent, { Constants } from 'exponent';
 const { LinearGradient } = Exponent.Components;
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import Swiper from 'react-native-swiper';
@@ -32,6 +32,7 @@ import ProgressBar from '../_global/ProgressBar';
 import Trailers from './tabs/Trailers';
 import styles from './styles/Movie';
 import { TMDB_IMG_URL, YOUTUBE_API_KEY, YOUTUBE_URL } from '../../constants/api';
+import BackButton from '../../navigation/BackButton';
 
 class Movie extends Component {
   static route = {
@@ -94,7 +95,7 @@ class Movie extends Component {
   _onScroll(event) {
     const contentOffsetY = event.nativeEvent.contentOffset.y.toFixed();
 
-    if (contentOffsetY > 150) {
+    if (contentOffsetY > 130) {
       this._toggleNavbar('hidden');
     } else {
       this._toggleNavbar('shown');
@@ -108,7 +109,7 @@ class Movie extends Component {
       }
       Animated.spring(this.state.dismissButtonVisibility, {
         toValue: 0,
-        speed: 15,
+        speed: 20,
         bounciness: 0,
       }).start();
     } else {
@@ -117,7 +118,7 @@ class Movie extends Component {
       }
       Animated.spring(this.state.dismissButtonVisibility, {
         toValue: 1,
-        speed: 15,
+        speed: 20,
         bounciness: 0,
       }).start();
     }
@@ -183,6 +184,12 @@ class Movie extends Component {
           </TouchableOpacity>
         </Animated.View>
       );
+    } else {
+      return (
+        <Animated.View style={[styles.dismissButton, {transform: [{translateY}]}]}>
+          <BackButton isModal />
+        </Animated.View>
+      );
     }
   }
 
@@ -198,94 +205,100 @@ class Movie extends Component {
 
     return (
       this.state.isLoading ? <View style={styles.progressBar}><ProgressBar /></View> :
-      <View style={{flex: 1}}>
-        <ScrollView
-            style={styles.container}
-            onScroll={this._onScroll.bind(this)}
-            scrollEventThrottle={100}
-            onContentSizeChange={this._onContentSizeChange}
-            refreshControl={
-              <RefreshControl
-                refreshing={this.state.isRefreshing}
-                onRefresh={this._onRefresh}
-                colors={['#EA0000']}
-                tintColor="white"
-                title="loading..."
-                titleColor="white"
-                progressBackgroundColor="white"
-              />
-            }>
-          <View style={{ height }}>
-            <Swiper
-              style={styles.swiper}
-              autoplay
-              autoplayTimeout={4}
-              showsPagination={false}
-              height={248}
-              loop
-              index={5}>
-              {
-                info.images.backdrops.map((item, index) => (
-                  <View key={index}>
-                    <FadeIn placeholderStyle={{backgroundColor: Platform.OS === 'android' ? 'transparent' : 'black'}}>
-                      <Image source={{ uri: `${TMDB_IMG_URL}/w780/${(item.file_path)}` }} style={styles.imageBackdrop} />
-                    </FadeIn>
-                    <LinearGradient
-                      colors={['rgba(0, 0, 0, 0.2)', 'rgba(0,0,0, 0.5)', 'rgba(0,0,0, 0.99)']}
-                      style={styles.linearGradient}
-                    />
+        <View style={{flex: 1}}>
+          { Platform.OS === 'android' &&
+              <View style={{
+                height: Constants.statusBarHeight,
+                backgroundColor: '#0a0a0a'
+              }} />
+          }
+          <ScrollView
+              style={styles.container}
+              onScroll={this._onScroll.bind(this)}
+              scrollEventThrottle={100}
+              onContentSizeChange={this._onContentSizeChange}
+              refreshControl={
+                <RefreshControl
+                  refreshing={this.state.isRefreshing}
+                  onRefresh={this._onRefresh}
+                  colors={['#EA0000']}
+                  tintColor="white"
+                  title="loading..."
+                  titleColor="white"
+                  progressBackgroundColor="white"
+                />
+              }>
+            <View style={{ height }}>
+              <Swiper
+                style={styles.swiper}
+                autoplay
+                autoplayTimeout={4}
+                showsPagination={false}
+                height={248}
+                loop
+                index={5}>
+                {
+                  info.images.backdrops.map((item, index) => (
+                    <View key={index}>
+                      <FadeIn placeholderStyle={{backgroundColor: Platform.OS === 'android' ? 'transparent' : 'black'}}>
+                        <Image source={{ uri: `${TMDB_IMG_URL}/w780/${(item.file_path)}` }} style={styles.imageBackdrop} />
+                      </FadeIn>
+                      <LinearGradient
+                        colors={['rgba(0, 0, 0, 0.2)', 'rgba(0,0,0, 0.5)', 'rgba(0,0,0, 0.99)']}
+                        style={styles.linearGradient}
+                      />
+                    </View>
+                  ))
+                }
+              </Swiper>
+              <View style={styles.cardContainer}>
+                <FadeIn placeholderStyle={{backgroundColor: Platform.OS === 'android' ? 'transparent' : 'black'}}>
+                  <Image source={{ uri: `${TMDB_IMG_URL}/w185/${info.poster_path}` }} style={styles.cardImage} />
+                </FadeIn>
+                <View style={styles.cardDetails}>
+                  <Text style={styles.cardTitle}>{info.original_title}</Text>
+                  <Text style={styles.cardTagline}>{info.tagline}</Text>
+                  <View style={styles.cardGenre}>
+                    {
+                      info.genres.map(item => (
+                        <Text key={item.id} style={styles.cardGenreItem}>{item.name}</Text>
+                      ))
+                    }
                   </View>
-                ))
-              }
-            </Swiper>
-            <View style={styles.cardContainer}>
-              <FadeIn placeholderStyle={{backgroundColor: Platform.OS === 'android' ? 'transparent' : 'black'}}>
-                <Image source={{ uri: `${TMDB_IMG_URL}/w185/${info.poster_path}` }} style={styles.cardImage} />
-              </FadeIn>
-              <View style={styles.cardDetails}>
-                <Text style={styles.cardTitle}>{info.original_title}</Text>
-                <Text style={styles.cardTagline}>{info.tagline}</Text>
-                <View style={styles.cardGenre}>
-                  {
-                    info.genres.map(item => (
-                      <Text key={item.id} style={styles.cardGenreItem}>{item.name}</Text>
-                    ))
-                  }
-                </View>
-                <View style={styles.cardNumbers}>
-                  <View style={styles.cardStar}>
-                    {iconStar}
-                    <Text style={styles.cardStarRatings}>8.9</Text>
+                  <View style={styles.cardNumbers}>
+                    <View style={styles.cardStar}>
+                      {iconStar}
+                      <Text style={styles.cardStarRatings}>8.9</Text>
+                    </View>
+                    <Text style={styles.cardRunningHours} />
                   </View>
-                  <Text style={styles.cardRunningHours} />
                 </View>
               </View>
+              <View style={styles.contentContainer}>
+                <ScrollableTabView
+                  onChangeTab={this._onChangeTab}
+                  renderTabBar={() => (
+                    <DefaultTabBar
+                      textStyle={styles.textStyle}
+                      underlineStyle={styles.underlineStyle}
+                      style={styles.tabBar}
+                    />
+                  )}>
+                  <Info tabLabel="INFO" info={info} />
+                  <Casts tabLabel="CASTS" info={info} getTabHeight={this._getTabHeight} />
+                  <Trailers tabLabel="TRAILERS" youtubeVideos={this.state.youtubeVideos} openYoutube={this._openYoutube} getTabHeight={this._getTabHeight} />
+                </ScrollableTabView>
+              </View>
             </View>
-            <View style={styles.contentContainer}>
-              <ScrollableTabView
-                onChangeTab={this._onChangeTab}
-                renderTabBar={() => (
-                  <DefaultTabBar
-                    textStyle={styles.textStyle}
-                    underlineStyle={styles.underlineStyle}
-                    style={styles.tabBar}
-                  />
-                )}>
-                <Info tabLabel="INFO" info={info} />
-                <Casts tabLabel="CASTS" info={info} getTabHeight={this._getTabHeight} />
-                <Trailers tabLabel="TRAILERS" youtubeVideos={this.state.youtubeVideos} openYoutube={this._openYoutube} getTabHeight={this._getTabHeight} />
-              </ScrollableTabView>
-            </View>
-          </View>
-        </ScrollView>
+          </ScrollView>
 
-        {this._renderDismissButton()}
-        <StatusBar
-          hidden={true}
-          animated
-          showHideTransition="slide"
-        />
-      </View>
+          {this._renderDismissButton()}
+          <StatusBar
+            hidden={Platform.OS === 'ios'}
+            animated
+            showHideTransition="slide"
+          />
+        </View>
     );
   }
 }

@@ -18,7 +18,9 @@ const iconStar = (<Icon name="md-star" size={16} color="#F5B642" />);
 
 const CardOne = ({ info, viewMovie }) => (
   <View>
-    <Image source={{ uri: `${TMDB_IMG_URL}/w780/${(info.backdrop_path || info.poster_path)}` }} style={styles.imageBackdrop} />
+    <FadeIn placeholderStyle={{backgroundColor: Platform.OS === 'android' ? 'transparent' : '#000'}}>
+      <Image source={{ uri: `${TMDB_IMG_URL}/w780/${(info.backdrop_path || info.poster_path)}` }} style={styles.imageBackdrop} />
+    </FadeIn>
     <LinearGradient colors={['rgba(0, 0, 0, 0.5)', 'rgba(0,0,0, 0.7)', 'rgba(0,0,0, 0.8)']} style={styles.linearGradient} />
     <View style={styles.cardContainer}>
       <FadeIn placeholderStyle={{backgroundColor: Platform.OS === 'android' ? 'transparent' : '#eee'}}>

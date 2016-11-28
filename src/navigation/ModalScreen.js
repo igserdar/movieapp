@@ -8,6 +8,9 @@ import {
   NavigationStyles,
   StackNavigation,
 } from '@exponent/ex-navigation';
+import BackButton from './BackButton';
+import CloseButton from './CloseButton';
+import defaultRouteConfig from './defaultRouteConfig';
 
 export default class ModalScreen extends React.Component {
   static route = {
@@ -15,9 +18,9 @@ export default class ModalScreen extends React.Component {
       ...NavigationStyles.SlideVertical,
       configureTransition: () => ({
         timing: Animated.spring,
-        speed: 20,
+        speed: 25,
         bounciness: 0,
-        useNativeDriver: false,
+        useNativeDriver: Platform.OS === 'android',
       }),
       gestures: null,
     },
@@ -38,6 +41,15 @@ export default class ModalScreen extends React.Component {
             ),
             navigationBar: {
               visible: true,
+              ...Platform.select({
+                ios: {
+                  renderRight: () => <CloseButton />,
+                },
+                android: {
+                  renderLeft: () => <BackButton isModal style={{marginLeft: 16}} />,
+                }
+              }),
+              ...defaultRouteConfig.navigationBar,
             },
           }}
         />
