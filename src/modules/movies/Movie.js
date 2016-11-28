@@ -7,6 +7,7 @@ import {
   RefreshControl,
   ScrollView,
   StatusBar,
+  NativeModules,
   StyleSheet,
   Text,
   ToastAndroid,
@@ -166,6 +167,10 @@ class Movie extends Component {
 
   _dismissModal = () => {
     this.props.navigation.dismissModal();
+
+    if (Platform.OS === 'ios') {
+      NativeModules.StatusBarManager.setHidden(false, 'slide');
+    }
   }
 
   _renderDismissButton() {
@@ -187,7 +192,7 @@ class Movie extends Component {
     } else {
       return (
         <Animated.View style={[styles.dismissButton, {transform: [{translateY}]}]}>
-          <BackButton isModal />
+          <BackButton onPress={this._dismissModal} />
         </Animated.View>
       );
     }

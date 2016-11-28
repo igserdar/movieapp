@@ -27,6 +27,10 @@ export default class BackButton extends React.Component {
   }
 
   _onPress = () => {
+    if (this.props.onPress) {
+      return this.props.onPress();
+    }
+
     if (this.props.isModal) {
       this.props.navigation.dismissModal();
     } else {
