@@ -30,6 +30,14 @@
     uuid-js "^0.7.5"
     warning "^2.1.0"
 
+"@exponent/react-native-fade-in-image@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@exponent/react-native-fade-in-image/-/react-native-fade-in-image-1.0.0.tgz#06e131e4a9e4940e7248234c908a7c361b4b4526"
+  dependencies:
+    react-clone-referenced-element "^1.0.1"
+    react-mixin "^3.0.5"
+    react-timer-mixin "^0.13.3"
+
 "@exponent/react-native-touchable-native-feedback-safe@^1.1.0":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@exponent/react-native-touchable-native-feedback-safe/-/react-native-touchable-native-feedback-safe-1.1.1.tgz#410aaa2a2a777a614127772b9ecba69fbe04cabd"

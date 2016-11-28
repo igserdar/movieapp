@@ -1,16 +1,16 @@
 import React, { PropTypes } from 'react';
 import {
-	TouchableOpacity
+  TouchableOpacity
 } from 'react-native';
 
 const Button = props => (
-	<TouchableOpacity {...props}>
-		{props.children}
-	</TouchableOpacity>
+  <TouchableOpacity {...props}>
+    {props.children}
+  </TouchableOpacity>
 );
 
 Button.propTypes = {
-	children: PropTypes.object
+  children: PropTypes.object
 };
 
 module.exports = Button;

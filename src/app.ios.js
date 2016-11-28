@@ -1,60 +1,68 @@
 /* eslint-disable no-unused-vars */
+// import { Navigation } from 'react-native-navigation';
+// import { registerScreens } from './screens';
+//
+// import { iconsMap, iconsLoaded } from './utils/AppIcons';
+
 import React, { Component } from 'react';
 import { View } from 'react-native';
-import { Navigation } from 'react-native-navigation';
 import { Provider } from 'react-redux';
-import { registerScreens } from './screens';
-
-import { iconsMap, iconsLoaded } from './utils/AppIcons';
 import configureStore from './store/configureStore';
-
 const store = configureStore();
 
-registerScreens(store, Provider);
+import {
+  NavigationProvider,
+  NavigationContext,
+  NavigationStyles,
+  StackNavigation,
+} from '@exponent/ex-navigation';
 
-const navigatorStyle = {
-	navBarTranslucent: true,
-	drawUnderNavBar: true,
-	navBarTextColor: 'white',
-	navBarButtonColor: 'white',
-	statusBarTextColorScheme: 'light'
-};
+import navigationContext from './navigation/CustomNavigationContext';
 
 class App extends Component {
-	constructor(props) {
-		super(props);
-		iconsLoaded.then(() => {
-			this.startApp();
-		});
-	}
+  render() {
+    return (
+      <View style={{flex: 1, backgroundColor: '#000'}}>
+        <Provider store={store}>
+          <NavigationProvider context={navigationContext}>
+            <StackNavigation
+              id="root"
+              navigatorUID="root"
+              initialRoute="tabNavigation"
+            />
+          </NavigationProvider>
+        </Provider>
+      </View>
+    );
+  }
 
-	startApp() {
-		Navigation.startTabBasedApp({
-			tabs: [
-				{
-					label: 'Movies',
-					screen: 'movieapp.Movies',
-					icon: iconsMap['ios-film-outline'],
-					selectedIcon: iconsMap['ios-film'],
-					title: 'Movies',
-					navigatorStyle
-				},
-				{
-					label: 'TV Shows',
-					screen: 'movieapp.Movies',
-					icon: iconsMap['ios-desktop-outline'],
-					selectedIcon: iconsMap['ios-desktop'],
-					title: 'Movies',
-					navigatorStyle
-				}
-			],
-			tabsStyle: {
-				tabBarButtonColor: 'white',
-				tabBarSelectedButtonColor: 'white',
-				tabBarBackgroundColor: 'black'
-			}
-		});
-	}
+  // startApp() {
+  //   Navigation.startTabBasedApp({
+  //     tabs: [
+  //       {
+  //         label: 'Movies',
+  //         screen: 'movieapp.Movies',
+  //         icon: iconsMap['ios-film-outline'],
+  //         selectedIcon: iconsMap['ios-film'],
+  //         title: 'Movies',
+  //         navigatorStyle
+  //       },
+  //       {
+  //         label: 'TV Shows',
+  //         screen: 'movieapp.Movies',
+  //         icon: iconsMap['ios-desktop-outline'],
+  //         selectedIcon: iconsMap['ios-desktop'],
+  //         title: 'Movies',
+  //         navigatorStyle
+  //       }
+  //     ],
+  //     tabsStyle: {
+  //       tabBarButtonColor: 'white',
+  //       tabBarSelectedButtonColor: 'white',
+  //       tabBarBackgroundColor: 'black'
+  //     }
+  //   });
+  // }
 }
 
 export default App;

@@ -10,26 +10,26 @@ const store = configureStore();
 registerScreens(store, Provider);
 
 const navigatorStyle = {
-	statusBarColor: 'black',
-	statusBarTextColorScheme: 'light',
-	navigationBarColor: 'black',
-	navBarBackgroundColor: '#0a0a0a',
-	navBarTextColor: 'white',
-	navBarButtonColor: 'white',
-	tabBarButtonColor: 'red',
-	tabBarSelectedButtonColor: 'red',
-	tabBarBackgroundColor: 'white'
+  statusBarColor: 'black',
+  statusBarTextColorScheme: 'light',
+  navigationBarColor: 'black',
+  navBarBackgroundColor: '#0a0a0a',
+  navBarTextColor: 'white',
+  navBarButtonColor: 'white',
+  tabBarButtonColor: 'red',
+  tabBarSelectedButtonColor: 'red',
+  tabBarBackgroundColor: 'white'
 };
 
 Navigation.startSingleScreenApp({
-	screen: {
-		screen: 'movieapp.Movies',
-		title: 'Movies',
-		navigatorStyle
-	},
-	drawer: {
-		left: {
-			screen: 'movieapp.Drawer'
-		}
-	}
+  screen: {
+    screen: 'movieapp.Movies',
+    title: 'Movies',
+    navigatorStyle
+  },
+  drawer: {
+    left: {
+      screen: 'movieapp.Drawer'
+    }
+  }
 });
