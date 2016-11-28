@@ -44,3 +44,4 @@ android/keystores/debug.keystore
 .env
 android/app/my-release-key.keystore
 yarn-error.log
+.exponent/*

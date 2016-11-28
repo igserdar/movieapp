@@ -6,7 +6,8 @@ import {
 	View
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import LinearGradient from 'react-native-linear-gradient';
+import Exponent from 'exponent';
+const { LinearGradient } = Exponent.Components;
 
 import styles from './styles/CardOne';
 import { TMDB_IMG_URL } from '../../../constants/api';
