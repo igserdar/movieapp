@@ -1,11 +1,9 @@
 /* eslint-disable import/prefer-default-export */
-// import Drawer from './modules/_global/Drawer';
 
-import {
-  createRouter,
-} from '@exponent/ex-navigation';
+import { createRouter } from '@exponent/ex-navigation';
 
 import TabNavigationScreen from './TabNavigationScreen';
+import DrawerNavigationScreen from './DrawerNavigationScreen';
 import BlankScreen from './BlankScreen';
 import ModalScreen from './ModalScreen';
 
@@ -19,7 +17,7 @@ export default createRouter(() => ({
   movies: () => Movies,
   moviesList: () => MoviesList,
   search: () => Search,
-  drawerNavigation: () => TabNavigationScreen,
+  drawerNavigation: () => DrawerNavigationScreen,
   tabNavigation: () => TabNavigationScreen,
   blank: () => BlankScreen,
   modal: () => ModalScreen,

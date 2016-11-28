@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#0a0a0a',
-    paddingTop: NavigationBar.DEFAULT_HEIGHT,
+    paddingTop: Platform.OS === 'ios' ? NavigationBar.DEFAULT_HEIGHT : 0,
   },
   textInput: {
     backgroundColor: 'white',
