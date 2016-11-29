@@ -158,8 +158,8 @@ class Movies extends Component {
                 </Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.7}>
-              <View style={styles.browseListItem} onPress={this._viewMoviesList.bind(this, 'upcoming', 'Upcoming')}>
+            <TouchableOpacity activeOpacity={0.7} onPress={this._viewMoviesList.bind(this, 'upcoming', 'Upcoming')}>
+              <View style={styles.browseListItem}>
                 {iconUp}
                 <Text style={styles.browseListItemText}>
                   Upcoming
